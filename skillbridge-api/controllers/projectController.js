@@ -1,6 +1,7 @@
 const { body } = require('express-validator');
 const Project = require('../models/Project');
 const Roadmap = require('../models/Roadmap');
+const Company = require('../models/Company');
 const Analysis = require('../models/Analysis');
 const { generateProject } = require('../utils/aiService');
 const { analyzeRepository, parseGitHubUrl } = require('../utils/repoAnalyzer');
@@ -13,7 +14,9 @@ const generateValidation = [
 ];
 
 const submitValidation = [
-  body('projectId').notEmpty().withMessage('Project ID is required'),
+  body('projectId')
+    .notEmpty().withMessage('Project ID is required')
+    .isMongoId().withMessage('Project ID must be a valid Mongo ID'),
   body('repoUrl')
     .notEmpty().withMessage('Repository URL is required')
     .isURL({ protocols: ['https'], require_protocol: true })
@@ -88,6 +91,81 @@ const generateProjectHandler = asyncHandler(async (req, res) => {
   return res.status(201).json({
     success: true,
     message: 'Project brief generated! Time to build something great.',
+    data: { project, isExisting: false },
+  });
+});
+
+/**
+ * POST /api/project/brief  (protected)
+ * Generate a project brief for a company without needing roadmap progress.
+ */
+const generateProjectBrief = asyncHandler(async (req, res) => {
+  const { companyId, jobRole = 'Software Engineer' } = req.body;
+  const userId = req.user._id;
+
+  // Avoid casting errors if companyId is not a Mongo ObjectId
+  const normalized = String(companyId).toLowerCase();
+  const companyQuery = [
+    { companyId: normalized },
+    { companyId: { $regex: `^${String(normalized).replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}` } },
+  ];
+  if (require('mongoose').Types.ObjectId.isValid(companyId)) {
+    companyQuery.push({ _id: companyId });
+  }
+  const company = await Company.findOne({ $or: companyQuery }).lean();
+
+  if (!company) {
+    return res.status(404).json({
+      success: false,
+      message: `Company '${companyId}' not found.`,
+    });
+  }
+
+  // Ensure we have a roadmap record to associate with this project
+  let roadmap = await Roadmap.findOne({ userId, companyId: company._id, jobRole });
+  if (!roadmap) {
+    roadmap = await Roadmap.create({
+      userId,
+      companyId: company._id,
+      jobRole,
+      nodes: [],
+      progress: 0,
+      knownSkills: [],
+    });
+  }
+
+  // Return existing project if already generated for this roadmap
+  const existingProject = await Project.findOne({ roadmapId: roadmap._id, userId });
+  if (existingProject) {
+    return res.status(200).json({
+      success: true,
+      message: 'Project brief already generated for this company.',
+      data: { project: existingProject, isExisting: true },
+    });
+  }
+
+  const skills = company.requiredSkills.map((s) => s.skill);
+
+  console.log(`🤖 Generating project brief for ${jobRole} at ${company.name}...`);
+
+  const projectData = await generateProject({
+    companyName: company.name,
+    jobRole,
+    sector: company.sector,
+    skills,
+    completedNodes: [],
+  });
+
+  const project = await Project.create({
+    userId,
+    roadmapId: roadmap._id,
+    ...projectData,
+    status: 'pending',
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: 'Project brief generated! You can submit a GitHub repo to analyze it.',
     data: { project, isExisting: false },
   });
 });
@@ -294,6 +372,7 @@ const getUserProjects = asyncHandler(async (req, res) => {
 
 module.exports = {
   generateProjectHandler,
+  generateProjectBrief,
   submitProject,
   getProject,
   getAnalysis,

@@ -1,7 +1,8 @@
 const axios = require('axios');
+const { GROQ_MODEL } = require('./ai.config');
 
 const GROQ_BASE_URL = 'https://api.groq.com/openai/v1';
-const DEFAULT_MODEL = 'llama3-70b-8192';
+const DEFAULT_MODEL = GROQ_MODEL;
 const MAX_RETRIES = 3;
 
 /**

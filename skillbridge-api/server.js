@@ -15,6 +15,7 @@ const sectorRoutes = require('./routes/sectors');
 const roadmapRoutes = require('./routes/roadmap');
 const projectRoutes = require('./routes/project');
 const userRoutes = require('./routes/user');
+const projectsRoutes = require('./routes/projects');
 
 // ─── App Init ─────────────────────────────────────────────────────────────────
 const app = express();
@@ -103,6 +104,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sectors', sectorRoutes);
 app.use('/api/roadmap', roadmapRoutes);
 app.use('/api/project', projectRoutes);
+app.use('/api/projects', projectsRoutes);
 app.use('/api/user', userRoutes);
 
 // ─── Root ─────────────────────────────────────────────────────────────────────

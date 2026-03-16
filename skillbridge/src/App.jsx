@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage'
 import VerifyOtpPage from './pages/VerifyOtpPage'
 import DashboardPage from './pages/DashboardPage'
 import SectorPage from './pages/SectorPage'
+import CompanyDetailsPage from './pages/CompanyDetailsPage'
 import RoadmapPage from './pages/RoadmapPage'
 import ProjectPage from './pages/ProjectPage'
 import AnalysisPage from './pages/AnalysisPage'
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/verify-otp" element={<VerifyOtpPage />} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="/sector/:sectorName" element={<ProtectedRoute><SectorPage /></ProtectedRoute>} />
+            <Route path="/company/:companyId" element={<ProtectedRoute><CompanyDetailsPage /></ProtectedRoute>} />
             <Route path="/roadmap/:companyId/:jobRole" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
             <Route path="/project/:roadmapId" element={<ProtectedRoute><ProjectPage /></ProtectedRoute>} />
             <Route path="/analysis/:projectId" element={<ProtectedRoute><AnalysisPage /></ProtectedRoute>} />

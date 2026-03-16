@@ -23,13 +23,12 @@ const generateRoadmapHandler = asyncHandler(async (req, res) => {
   const { companyId, jobRole, knownSkills = [] } = req.body;
   const userId = req.user._id;
 
-  // Fetch company
-  const company = await Company.findOne({
-    $or: [
-      { companyId: companyId.toLowerCase() },
-      { _id: companyId },
-    ],
-  });
+  // Fetch company (avoid casting errors when companyId is not an ObjectId)
+  const query = [{ companyId: companyId.toLowerCase() }]
+  if (require('mongoose').Types.ObjectId.isValid(companyId)) {
+    query.push({ _id: companyId })
+  }
+  const company = await Company.findOne({ $or: query });
 
   if (!company) {
     return res.status(404).json({

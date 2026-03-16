@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   generateProjectHandler,
+  generateProjectBrief,
   submitProject,
   getProject,
   getAnalysis,
@@ -17,6 +18,9 @@ router.use(protect);
 
 // POST /api/project/generate
 router.post('/generate', aiLimiter, generateValidation, validate, generateProjectHandler);
+
+// POST /api/project/brief
+router.post('/brief', aiLimiter, generateProjectBrief);
 
 // POST /api/project/submit
 router.post('/submit', submitValidation, validate, submitProject);

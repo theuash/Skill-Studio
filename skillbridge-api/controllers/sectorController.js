@@ -1,6 +1,9 @@
+const mongoose = require('mongoose');
 const Sector = require('../models/Sector');
 const Company = require('../models/Company');
 const { asyncHandler } = require('../middleware/errorHandler');
+
+const escapeRegExp = (str) => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * GET /api/sectors
@@ -65,13 +68,18 @@ const getCompaniesBySector = asyncHandler(async (req, res) => {
  */
 const getCompanyById = asyncHandler(async (req, res) => {
   const { companyId } = req.params;
+  const normalized = String(companyId).toLowerCase();
 
-  const company = await Company.findOne({
-    $or: [
-      { companyId: companyId.toLowerCase() },
-      { _id: companyId },
-    ],
-  }).lean();
+  const query = [
+    { companyId: normalized },
+    { companyId: { $regex: `^${escapeRegExp(normalized)}` } },
+  ];
+
+  if (mongoose.Types.ObjectId.isValid(companyId)) {
+    query.push({ _id: companyId });
+  }
+
+  const company = await Company.findOne({ $or: query }).lean();
 
   if (!company) {
     return res.status(404).json({

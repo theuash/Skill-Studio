@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, CheckCircle2, Circle, ChevronDown, ChevronUp, Youtube, FileText, Clock, Zap, X } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Circle, ChevronDown, ChevronUp, Youtube, FileText, Clock, Zap, X, FolderOpen, Code2 } from 'lucide-react'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Button from '../components/ui/Button'
 import { ROADMAP_NODES, COMPANIES } from '../utils/data'
 import toast from 'react-hot-toast'
+import api from '../api/axios'
 
 const DIFFICULTY_COLORS = {
   Beginner: { bg: 'rgba(76,205,196,0.15)', text: '#4ECDC4', border: 'rgba(76,205,196,0.4)', dot: '#4ECDC4' },
@@ -158,6 +159,9 @@ export default function RoadmapPage() {
   const [checked, setChecked] = useState(new Set())
   const [expanded, setExpanded] = useState(null)
   const [company, setCompany] = useState(null)
+  const [activeTab, setActiveTab] = useState('roadmap')
+  const [projects, setProjects] = useState([])
+  const [projectsLoading, setProjectsLoading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -174,6 +178,25 @@ export default function RoadmapPage() {
       setLoading(false)
     }, 900)
   }, [companyId, jobRole])
+
+  const fetchProjects = async () => {
+    setProjectsLoading(true)
+    try {
+      const res = await api.get('/projects/my-projects')
+      setProjects(res.data.data.projects || [])
+    } catch (err) {
+      toast.error('Failed to load projects')
+      console.error('Projects fetch error:', err)
+    } finally {
+      setProjectsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (activeTab === 'projects') {
+      fetchProjects()
+    }
+  }, [activeTab])
 
   const toggleCheck = (id) => {
     setChecked(prev => {
@@ -202,12 +225,44 @@ export default function RoadmapPage() {
           <ArrowLeft size={16} /> Back
         </button>
 
+        {/* Tabs */}
+        <div className="flex gap-1 mb-8 p-1 rounded-xl" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+          <button
+            onClick={() => setActiveTab('roadmap')}
+            className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'roadmap' ? 'shadow-sm' : ''
+            }`}
+            style={{
+              background: activeTab === 'roadmap' ? 'var(--background)' : 'transparent',
+              color: activeTab === 'roadmap' ? 'var(--text)' : 'var(--text-muted)',
+              border: activeTab === 'roadmap' ? '1px solid var(--border)' : 'none',
+            }}
+          >
+            <FolderOpen size={16} className="inline mr-2" />
+            My Roadmaps
+          </button>
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'projects' ? 'shadow-sm' : ''
+            }`}
+            style={{
+              background: activeTab === 'projects' ? 'var(--background)' : 'transparent',
+              color: activeTab === 'projects' ? 'var(--text)' : 'var(--text-muted)',
+              border: activeTab === 'projects' ? '1px solid var(--border)' : 'none',
+            }}
+          >
+            <Code2 size={16} className="inline mr-2" />
+            My Projects
+          </button>
+        </div>
+
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <div className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin"
               style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
           </div>
-        ) : (
+        ) : activeTab === 'roadmap' ? (
           <div className="flex gap-8 items-start">
             {/* Main roadmap */}
             <div className="flex-1 min-w-0">
@@ -351,6 +406,102 @@ export default function RoadmapPage() {
                 </div>
               )}
             </div>
+          </div>
+        ) : (
+          /* Projects Tab */
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-heading font-bold text-2xl mb-2" style={{ color: 'var(--text)' }}>
+                  My Projects
+                </h2>
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                  Track your project submissions and AI analysis results
+                </p>
+              </div>
+              <Button onClick={() => setActiveTab('roadmap')} variant="secondary">
+                Back to Roadmap
+              </Button>
+            </div>
+
+            {projectsLoading ? (
+              <div className="flex items-center justify-center py-24">
+                <div className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin"
+                  style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="text-center py-24">
+                <Code2 size={48} className="mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
+                <h3 className="font-heading font-bold text-xl mb-2" style={{ color: 'var(--text)' }}>
+                  No Projects Yet
+                </h3>
+                <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
+                  Complete your roadmap and submit your first project for AI analysis.
+                </p>
+                <Button onClick={() => setActiveTab('roadmap')} variant="primary">
+                  View My Roadmap
+                </Button>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {projects.map((project, i) => {
+                  const resultColors = {
+                    PASS: { bg: 'rgba(76,205,196,0.1)', text: '#4ECDC4', border: 'rgba(76,205,196,0.3)' },
+                    PARTIAL: { bg: 'rgba(255,193,7,0.1)', text: '#FFC107', border: 'rgba(255,193,7,0.3)' },
+                    FAIL: { bg: 'rgba(255,107,107,0.1)', text: '#FF6B6B', border: 'rgba(255,107,107,0.3)' },
+                  }[project.overallResult] || { bg: 'var(--surface)', text: 'var(--text)', border: 'var(--border)' }
+
+                  return (
+                    <motion.div
+                      key={project._id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="p-6 rounded-2xl"
+                      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="font-heading font-bold text-lg mb-1" style={{ color: 'var(--text)' }}>
+                            {project.problem?.title || 'Project Analysis'}
+                          </h3>
+                          <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+                            {project.problem?.companyName || 'Unknown Company'}
+                          </p>
+                          <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--text-muted)' }}>
+                            <span>Score: <strong style={{ color: resultColors.text }}>{project.overallScore}/100</strong></span>
+                            <span>Status: <strong style={{ color: resultColors.text }}>{project.overallResult}</strong></span>
+                            <span>{new Date(project.analyzedAt).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div
+                          className="px-3 py-1 rounded-full text-xs font-semibold"
+                          style={{ background: resultColors.bg, color: resultColors.text, border: `1px solid ${resultColors.border}` }}
+                        >
+                          {project.overallResult}
+                        </div>
+                      </div>
+
+                      <p className="text-sm mb-4" style={{ color: 'var(--text-muted)' }}>
+                        {project.summary}
+                      </p>
+
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs px-3 py-1 rounded-lg transition-colors"
+                          style={{ background: 'var(--background)', color: 'var(--accent)', border: '1px solid var(--border)' }}
+                        >
+                          View Repository →
+                        </a>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>

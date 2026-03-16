@@ -236,7 +236,7 @@ GET /api/health
 
 ## 🤖 AI Features
 
-### Roadmap Generation (Groq — llama3-70b-8192)
+### Roadmap Generation (Groq — llama-3.3-70b-versatile)
 - Generates 15–20 ordered learning nodes
 - Each node includes real free resource URLs (MDN, YouTube, freeCodeCamp)
 - Auto-marks known skills as completed

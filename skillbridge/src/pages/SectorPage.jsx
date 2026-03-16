@@ -6,6 +6,7 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import CompanyCard from '../components/ui/CompanyCard'
 import { SkeletonCard } from '../components/ui/Skeleton'
 import { SECTORS, COMPANIES } from '../utils/data'
+import api from '../api/axios'
 
 export default function SectorPage() {
   const { sectorName } = useParams()
@@ -19,11 +20,38 @@ export default function SectorPage() {
     const sec = SECTORS.find(s => s.id === sectorName)
     setSector(sec)
     setLoading(true)
-    // Simulate API fetch
-    setTimeout(() => {
-      setCompanies(COMPANIES[sectorName] || COMPANIES['web-development'])
-      setLoading(false)
-    }, 800)
+
+    const fetchCompanies = async () => {
+      try {
+        const res = await api.get(`/sectors/${sectorName}/companies`)
+        const apiCompanies = res.data?.data?.companies || []
+        const companies = apiCompanies.map((c) => ({
+          ...c,
+          // Keep older components expecting `id` field
+          id: c.companyId || c._id,
+          // Convert backend requiredSkills into the UI-friendly skills list
+          skills: c.requiredSkills?.map((s) => s.skill) || [],
+        }))
+        if (companies.length === 0) {
+          throw new Error('No companies returned from API')
+        }
+        setCompanies(companies)
+      } catch (err) {
+        // Fallback to built-in list if API is unavailable
+        const fallback = COMPANIES[sectorName] || []
+        setCompanies(
+          fallback.map((c) => ({
+            ...c,
+            companyId: c.companyId || c.id,
+            id: c.id,
+          }))
+        )
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCompanies()
   }, [sectorName])
 
   const filtered = companies.filter(c =>
