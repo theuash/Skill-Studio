@@ -64,7 +64,7 @@ export default function VerifyOtpPage() {
       const res = await api.post('/auth/verify-otp', { email, otp: code })
       const { token, user } = res.data.data
       login(token, user)
-      toast.success('Email verified! Welcome aboard 🎉')
+      toast.success('Email verified! Welcome aboard.')
       navigate('/dashboard')
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid OTP')
@@ -96,7 +96,7 @@ export default function VerifyOtpPage() {
       subtitle={`We sent a 6-digit code to ${email || 'your email'}. Enter it below.`}
     >
       <form onSubmit={handleSubmit}>
-        <div className="flex gap-3 justify-center mb-8" onPaste={handlePaste}>
+        <div className="flex gap-2 sm:gap-3 justify-center mb-8 flex-wrap" onPaste={handlePaste}>
           {otp.map((digit, idx) => (
             <motion.input
               key={idx}

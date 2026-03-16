@@ -36,7 +36,7 @@ export default function LoginPage() {
       const res = await api.post('/auth/login', form)
       const { token, user } = res.data.data
       login(token, user)
-      toast.success(`Welcome back, ${user?.fullName?.split(' ')[0] || 'there'}! 👋`)
+      toast.success(`Welcome back! Sign in successful.`)
       navigate('/dashboard')
     } catch (err) {
       const msg = err.response?.data?.message || 'Invalid credentials'
@@ -52,13 +52,13 @@ export default function LoginPage() {
     login('demo_token_123', {
       id: 'demo',
       name: 'Alex Johnson',
-      email: 'alex@skillbridge.dev',
+      email: 'alex@skillstudio.dev',
       avatar: null,
       roadmapsStarted: 3,
       projectsSubmitted: 1,
       skillsLearned: 12,
     })
-    toast.success('Welcome to the demo! 🎉')
+    toast.success('Demo mode activated. Explore Skill Studio!')
     navigate('/dashboard')
   }
 
@@ -109,7 +109,7 @@ export default function LoginPage() {
         </div>
 
         <Button type="button" variant="ghost" size="lg" fullWidth onClick={handleDemoLogin}>
-          🚀 Try Demo Account
+          Try Demo Account
         </Button>
 
         <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>

@@ -4,43 +4,36 @@ import { Map, BarChart3, Building2, Brain, Target, Trophy } from 'lucide-react'
 
 const features = [
   {
-    icon: Map,
-    color: '#6C63FF',
-    title: 'AI-Powered Roadmaps',
-    description: 'Get personalized learning paths tailored to your target company and job role. Our AI analyzes thousands of job postings to build the perfect roadmap.',
-    highlights: ['Company-specific skills', 'Adaptive to your level', 'Weekly updates'],
-  },
-  {
     icon: BarChart3,
-    color: '#00D4FF',
+    color: '#6C6E36',
     title: 'Skill Gap Analysis',
     description: 'Instantly identify what skills you\'re missing and what to prioritize. Stop guessing — start learning with purpose and direction.',
     highlights: ['Real-time assessment', 'Priority ranking', 'Progress tracking'],
   },
   {
     icon: Building2,
-    color: '#4ECDC4',
+    color: '#44444E',
     title: 'Company-Specific Learning',
     description: 'Learn exactly what Google, Meta, Netflix, or your dream company actually uses. Stack-specific projects and real interview preparation.',
     highlights: ['500+ top companies', 'Tech stack mapping', 'Interview prep'],
   },
   {
     icon: Brain,
-    color: '#FF6B6B',
+    color: '#D3DAD9',
     title: 'AI Code Review',
     description: 'Submit your project repo and receive detailed AI feedback on code quality, architecture patterns, and industry best practices.',
     highlights: ['Automated analysis', 'Detailed scoring', 'Actionable feedback'],
   },
   {
     icon: Target,
-    color: '#FFEAA7',
+    color: '#6C6E36',
     title: 'Project-Based Learning',
     description: 'Build real-world projects aligned with company expectations. Every roadmap ends with a production-grade project that proves your skills.',
     highlights: ['Real projects', 'GitHub integration', 'Portfolio ready'],
   },
   {
     icon: Trophy,
-    color: '#DFD3FF',
+    color: '#44444E',
     title: 'Track Your Progress',
     description: 'Visual progress tracking across all your roadmaps. Earn skill badges, track completion rates, and see your growth over time.',
     highlights: ['Visual dashboard', 'Skill badges', 'Completion history'],
@@ -58,28 +51,28 @@ function FeatureCard({ feature, index }) {
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="gradient-border group cursor-default"
-      style={{ background: 'var(--surface)', padding: '1.75rem', borderRadius: '20px' }}
+      className="gradient-border group cursor-default hover:shadow-lg transition-all duration-300"
+      style={{ background: 'var(--surface)', padding: '2rem', borderRadius: '16px' }}
     >
       {/* Icon */}
       <div
         className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
-        style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+        style={{ background: `${color}18`, border: `1.5px solid ${color}30` }}
       >
-        <Icon size={22} color={color} />
+        <Icon size={22} color={color} strokeWidth={2.5} />
       </div>
 
       <h3 className="font-heading font-bold text-lg mb-3" style={{ color: 'var(--text)' }}>
         {title}
       </h3>
-      <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-muted)' }}>
+      <p className="text-sm leading-relaxed mb-5 font-normal" style={{ color: 'var(--text-muted)' }}>
         {description}
       </p>
 
       <ul className="space-y-2">
         {highlights.map(h => (
           <li key={h} className="flex items-center gap-2 text-sm">
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
             <span style={{ color: 'var(--text-muted)' }}>{h}</span>
           </li>
         ))}
@@ -104,16 +97,16 @@ export default function FeaturesSection() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
-            style={{ background: 'rgba(108,99,255,0.1)', border: '1px solid rgba(108,99,255,0.25)' }}>
-            <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+            style={{ background: 'rgba(68, 68, 78, 0.08)', border: '1px solid rgba(108, 110, 54, 0.25)' }}>
+            <span className="text-sm font-semibold" style={{ color: 'var(--primary)' }}>
               Everything You Need
             </span>
           </div>
-          <h2 className="font-heading font-extrabold text-4xl sm:text-5xl mb-4" style={{ color: 'var(--text)' }}>
+          <h2 className="font-heading font-extrabold text-4xl sm:text-5xl mb-4" style={{ color: 'var(--text)', letterSpacing: '-0.02em' }}>
             Your Career. <span className="gradient-text">Supercharged.</span>
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' }}>
-            From skill gaps to job offers — SkillBridge gives you every tool to navigate your career journey with confidence.
+          <p className="text-lg max-w-2xl mx-auto font-normal" style={{ color: 'var(--text-muted)' }}>
+            From skill gaps to job offers — Skill Studio gives you every tool to navigate your career journey with confidence.
           </p>
         </motion.div>
 

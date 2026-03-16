@@ -3,11 +3,11 @@ import { motion, useInView } from 'framer-motion'
 import { Search, Building2, Map, Code2, Star } from 'lucide-react'
 
 const steps = [
-  { icon: Search, label: 'Pick a Sector', description: 'Choose from 10+ tech domains that match your career goals.', color: '#6C63FF', number: '01' },
-  { icon: Building2, label: 'Choose a Company', description: 'Select your dream employer from 500+ top tech companies.', color: '#00D4FF', number: '02' },
-  { icon: Map, label: 'Get Your Roadmap', description: 'Receive an AI-generated, personalized learning path instantly.', color: '#4ECDC4', number: '03' },
-  { icon: Code2, label: 'Build Real Projects', description: 'Apply your skills in production-grade portfolio projects.', color: '#FF6B6B', number: '04' },
-  { icon: Star, label: 'Get AI Evaluated', description: 'Submit your work and receive detailed expert-level feedback.', color: '#FFEAA7', number: '05' },
+  { icon: Search, label: 'Pick a Sector', description: 'Choose from 10+ tech domains that match your career goals.', color: '#44444E', number: '01' },
+  { icon: Building2, label: 'Choose a Company', description: 'Select your dream employer from 500+ top tech companies.', color: '#6C6E36', number: '02' },
+  { icon: Map, label: 'Get Your Roadmap', description: 'Receive an AI-generated, personalized learning path instantly.', color: '#44444E', number: '03' },
+  { icon: Code2, label: 'Build Real Projects', description: 'Apply your skills in production-grade portfolio projects.', color: '#6C6E36', number: '04' },
+  { icon: Star, label: 'Get AI Evaluated', description: 'Submit your work and receive detailed expert-level feedback.', color: '#D3DAD9', number: '05' },
 ]
 
 export default function HowItWorksSection() {
@@ -26,15 +26,15 @@ export default function HowItWorksSection() {
           className="text-center mb-20"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
-            style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.25)' }}>
-            <span className="text-sm font-medium" style={{ color: 'var(--secondary)' }}>
+            style={{ background: 'rgba(108, 110, 54, 0.08)', border: '1px solid rgba(108, 110, 54, 0.25)' }}>
+            <span className="text-sm font-semibold" style={{ color: 'var(--secondary)' }}>
               Simple. Powerful. Proven.
             </span>
           </div>
-          <h2 className="font-heading font-extrabold text-4xl sm:text-5xl mb-4" style={{ color: 'var(--text)' }}>
-            How <span className="gradient-text">SkillBridge</span> Works
+          <h2 className="font-heading font-extrabold text-4xl sm:text-5xl mb-4" style={{ color: 'var(--text)', letterSpacing: '-0.02em' }}>
+            How <span className="gradient-text">Skill Studio</span> Works
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-lg max-w-2xl mx-auto font-normal" style={{ color: 'var(--text-muted)' }}>
             Five simple steps from where you are to where you want to be.
           </p>
         </motion.div>
@@ -43,7 +43,7 @@ export default function HowItWorksSection() {
         <div className="relative">
           {/* Connecting line (desktop) */}
           <div className="hidden lg:block absolute top-14 left-0 right-0 h-0.5 mx-28"
-            style={{ background: 'linear-gradient(90deg, var(--accent), var(--secondary))' }} />
+            style={{ background: 'linear-gradient(90deg, var(--primary), var(--secondary))' }} />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 relative">
             {steps.map(({ icon: Icon, label, description, color, number }, i) => (
@@ -58,13 +58,13 @@ export default function HowItWorksSection() {
                 <div className="relative mb-6">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center relative z-10"
+                    className="w-16 h-16 rounded-2xl flex items-center justify-center relative z-10 transition-all"
                     style={{
                       background: `${color}18`,
                       border: `2px solid ${color}50`,
                     }}
                   >
-                    <Icon size={26} color={color} />
+                    <Icon size={26} color={color} strokeWidth={2} />
                   </motion.div>
                   {/* Number badge */}
                   <div
@@ -78,7 +78,7 @@ export default function HowItWorksSection() {
                 <span className="font-heading font-bold text-base mb-2" style={{ color: 'var(--text)' }}>
                   {label}
                 </span>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                <p className="text-sm leading-relaxed font-normal" style={{ color: 'var(--text-muted)' }}>
                   {description}
                 </p>
               </motion.div>
@@ -95,10 +95,10 @@ export default function HowItWorksSection() {
         >
           <a href="/register">
             <motion.button
-              whileHover={{ scale: 1.04, boxShadow: '0 0 40px rgba(108,99,255,0.4)' }}
-              whileTap={{ scale: 0.97 }}
-              className="px-10 py-4 rounded-2xl font-semibold text-white cursor-pointer"
-              style={{ background: 'linear-gradient(135deg, var(--accent), var(--secondary))' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 8px 32px rgba(108, 110, 54, 0.25)' }}
+              whileTap={{ scale: 0.98 }}
+              className="px-10 py-4 rounded-2xl font-semibold text-white cursor-pointer transition-all"
+              style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}
             >
               Start Your Journey →
             </motion.button>

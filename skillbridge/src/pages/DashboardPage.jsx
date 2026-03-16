@@ -76,7 +76,7 @@ export default function DashboardPage() {
           <div className="relative z-10">
             <p className="text-sm mb-1" style={{ color: 'var(--accent)' }}>Good {getGreeting()},</p>
             <h1 className="font-heading font-extrabold text-3xl sm:text-4xl mb-3" style={{ color: 'var(--text)' }}>
-              {firstName} 👋
+              {firstName}
             </h1>
             <p className="text-sm max-w-md mb-6" style={{ color: 'var(--text-muted)' }}>
               You have 2 roadmaps in progress. Keep pushing — you're 68% through your Google SWE path!
@@ -115,7 +115,7 @@ export default function DashboardPage() {
               color: 'var(--text)',
             }}
           >
-            🔍 Browse by Sector
+            Browse by Sector
             <ChevronDown size={15} className={`transition-transform ${sectorOpen ? 'rotate-180' : ''}`} />
           </button>
 

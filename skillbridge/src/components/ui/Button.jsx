@@ -46,11 +46,11 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      whileHover={!disabled && !loading ? { scale: 1.02 } : {}}
+      whileHover={!disabled && !loading ? { scale: 1.03, y: -2 } : {}}
       whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
-      className={`font-medium rounded-xl flex items-center justify-center gap-2 transition-opacity cursor-pointer
+      className={`font-medium rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm
         ${sizes[size]} ${fullWidth ? 'w-full' : ''}
-        ${disabled || loading ? 'opacity-60 cursor-not-allowed' : ''}
+        ${disabled || loading ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-md'}
         ${className}`}
       style={variants[variant]}
     >

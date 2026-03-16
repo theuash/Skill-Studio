@@ -2,6 +2,9 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Logo from '../ui/Logo'
 import ThemeToggle from '../ui/ThemeToggle'
+import RoadmapIcon from '../icons/RoadmapIcon'
+import CompanyIcon from '../icons/CompanyIcon'
+import BrainIcon from '../icons/BrainIcon'
 
 function AnimatedVisual() {
   return (
@@ -58,8 +61,8 @@ function AnimatedVisual() {
 
           <h2 className="font-heading font-extrabold text-3xl text-white mb-3">
             Welcome to<br />
-            <span style={{ background: 'linear-gradient(90deg,#6C63FF,#00D4FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              SkillBridge
+            <span style={{ background: 'linear-gradient(90deg, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Skill Studio
             </span>
           </h2>
           <p className="text-gray-400 text-sm leading-relaxed">
@@ -70,19 +73,20 @@ function AnimatedVisual() {
         {/* Feature pills */}
         <div className="space-y-3">
           {[
-            '🗺️ AI-personalized career roadmaps',
-            '🏢 500+ top company skill maps',
-            '🤖 Instant AI code evaluation',
+            { icon: RoadmapIcon, text: 'AI-personalized career roadmaps' },
+            { icon: CompanyIcon, text: '500+ top company skill maps' },
+            { icon: BrainIcon, text: 'Instant AI code evaluation' },
           ].map((feat, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 + i * 0.15, duration: 0.5 }}
-              className="px-4 py-2.5 rounded-xl text-sm text-left text-gray-300"
+              className="px-4 py-2.5 rounded-xl text-sm text-left text-gray-300 flex items-center gap-3"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
             >
-              {feat}
+              <feat.icon size={16} style={{ color: '#6C63FF', flexShrink: 0 }} />
+              {feat.text}
             </motion.div>
           ))}
         </div>

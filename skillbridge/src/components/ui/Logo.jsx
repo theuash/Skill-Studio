@@ -15,7 +15,7 @@ export default function Logo({ size = 'md', to = '/' }) {
         style={{
           width: s.icon + 16,
           height: s.icon + 16,
-          background: 'linear-gradient(135deg, var(--accent), var(--secondary))',
+          background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
         }}
       >
         <svg width={s.icon} height={s.icon} viewBox="0 0 24 24" fill="none">
@@ -24,7 +24,7 @@ export default function Logo({ size = 'md', to = '/' }) {
         </svg>
       </div>
       <span className={`font-heading font-bold ${s.text}`} style={{ color: 'var(--text)' }}>
-        Skill<span className="gradient-text">Bridge</span>
+        Skill<span className="gradient-text">Studio</span>
       </span>
     </Link>
   )

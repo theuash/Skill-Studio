@@ -19,6 +19,7 @@ const NAV_ITEMS = [
 
 export default function DashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
@@ -36,9 +37,9 @@ export default function DashboardLayout({ children }) {
     <div className="flex min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Sidebar */}
       <motion.aside
-        animate={{ width: collapsed ? 72 : 260 }}
+        animate={{ width: collapsed ? 72 : 260, x: 0 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="fixed top-0 left-0 h-screen z-40 flex flex-col overflow-hidden"
+        className="fixed top-0 left-0 h-screen z-40 flex flex-col overflow-hidden hidden md:flex"
         style={{
           background: 'var(--surface)',
           borderRight: '1px solid var(--border)',
@@ -144,10 +145,15 @@ export default function DashboardLayout({ children }) {
       <motion.main
         animate={{ marginLeft: collapsed ? 72 : 260 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="flex-1 min-h-screen"
+        className="flex-1 min-h-screen md:block hidden"
       >
         {children}
       </motion.main>
+
+      {/* Mobile main content */}
+      <div className="flex-1 min-h-screen md:hidden">
+        {children}
+      </div>
     </div>
   )
 }

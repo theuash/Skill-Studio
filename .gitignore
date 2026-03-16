@@ -1,0 +1,3 @@
+./skillbridge-api/.env
+./skillbridge-api/package-lock.json
+./skillbridge-api/node_modules

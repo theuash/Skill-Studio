@@ -42,14 +42,22 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map(link => (
-            <a
+            <motion.a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium transition-colors hover:opacity-100"
+              className="text-sm font-medium transition-colors hover:opacity-100 relative"
               style={{ color: 'var(--text-muted)' }}
+              whileHover={{ color: 'var(--accent)' }}
             >
               {link.label}
-            </a>
+              <motion.div
+                className="absolute bottom-0 left-0 h-0.5"
+                style={{ background: 'linear-gradient(90deg, var(--primary), var(--secondary))' }}
+                initial={{ width: 0 }}
+                whileHover={{ width: '100%' }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.a>
           ))}
         </div>
 

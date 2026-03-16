@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Github, Send, Zap, CheckCircle, Code2, ListChecks, Sparkles } from 'lucide-react'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Button from '../components/ui/Button'
+import BrainIcon from '../components/icons/BrainIcon'
 import toast from 'react-hot-toast'
 import api from '../api/axios'
 
@@ -83,7 +84,7 @@ export default function ProjectPage() {
 
     setTimeout(() => {
       setAnalyzing(false)
-      toast.success('Analysis complete! 🎉')
+      toast.success('Analysis complete! Your report is ready.')
       navigate(`/analysis/${roadmapId}`)
     }, 3500)
   }
@@ -119,9 +120,10 @@ export default function ProjectPage() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs px-3 py-1 rounded-full font-medium"
+            <span className="text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 "
               style={{ background: 'rgba(108,99,255,0.12)', color: 'var(--accent)', border: '1px solid rgba(108,99,255,0.25)' }}>
-              🤖 AI Generated
+              <BrainIcon size={13} />
+              AI Generated
             </span>
             <span className="text-xs px-3 py-1 rounded-full"
               style={{ background: 'rgba(255,107,107,0.1)', color: '#FF6B6B', border: '1px solid rgba(255,107,107,0.25)' }}>
