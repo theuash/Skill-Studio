@@ -2,7 +2,7 @@
 
 > **Bridge the Gap Between Learning and Earning** — An AI-powered career guidance platform that gives developers company-specific skill roadmaps, real projects, and instant AI code evaluation.
 
----
+--- ..
 
 ## ✨ Features
 
