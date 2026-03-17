@@ -71,6 +71,10 @@ const companySchema = new mongoose.Schema(
       enum: ['medium', 'hard', 'very-hard'],
       default: 'hard',
     },
+    website: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true }
 );

@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    savedJobs: {
+      type: [String], // Array of job IDs
+      default: [],
+    },
     passwordResetToken: {
       type: String,
       select: false,

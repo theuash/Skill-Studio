@@ -1,17 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, Map, FolderGit2, User, LogOut,
-  ChevronLeft, ChevronRight, Zap
+  ChevronLeft, ChevronRight, Zap, Newspaper, Briefcase,
+  ChevronDown, Compass
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import Logo from '../ui/Logo'
 import ThemeToggle from '../ui/ThemeToggle'
 import toast from 'react-hot-toast'
+import api from '../../api/axios'
+
+const SECTORS = [
+  { id: 'web-development', name: 'Tech', icon: '💻' },
+  { id: 'finance', name: 'Finance', icon: '💰' },
+  { id: 'healthcare', name: 'Healthcare', icon: '🏥' },
+  { id: 'education', name: 'Education', icon: '🎓' },
+  { id: 'manufacturing', name: 'Manufacturing', icon: '🏭' },
+]
 
 const NAV_ITEMS = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/news', icon: Newspaper, label: 'News' },
+  { to: '/jobs', icon: Briefcase, label: 'Jobs' },
   { to: '/sector/web-development', icon: Map, label: 'My Roadmaps' },
   { to: '/project/sample', icon: FolderGit2, label: 'Projects' },
   { to: '/profile', icon: User, label: 'Profile' },
@@ -19,13 +31,33 @@ const NAV_ITEMS = [
 
 export default function DashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false)
+  const [sectorsOpen, setSectorsOpen] = useState(false)
+  const [jobsCount, setJobsCount] = useState(0)
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Fetch jobs count for badge
+    const fetchJobsCount = async () => {
+      try {
+        const res = await api.get('/jobs/count')
+      setJobsCount(res.data?.data?.count || 0)
+      } catch (err) {
+        // Silently fail, badge will show 0
+      }
+    }
+    fetchJobsCount()
+  }, [])
 
   const handleLogout = () => {
     logout()
     toast.success('Logged out successfully')
     navigate('/')
+  }
+
+  const handleSectorSelect = (sector) => {
+    navigate(`/dashboard?sector=${sector.id}`)
+    setSectorsOpen(false)
   }
 
   const initials = user?.name
@@ -79,13 +111,64 @@ export default function DashboardLayout({ children }) {
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          {/* Browse by Sector - Collapsible */}
+          <div className="space-y-1">
+            <button
+              onClick={() => setSectorsOpen(o => !o)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full transition-all
+                ${collapsed ? 'justify-center' : ''}`}
+              style={{ color: 'var(--text-muted)' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(108,99,255,0.1)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              title={collapsed ? 'Browse by Sector' : undefined}
+            >
+              <Compass size={18} className="flex-shrink-0" />
+              {!collapsed && (
+                <>
+                  <span>Sectors</span>
+                  <ChevronDown size={14} className={`ml-auto transition-transform ${sectorsOpen ? 'rotate-180' : ''}`} />
+                </>
+              )}
+            </button>
+
+            <AnimatePresence>
+              {sectorsOpen && !collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="ml-6 space-y-1 overflow-hidden"
+                >
+                  {SECTORS.map(sector => (
+                    <button
+                      key={sector.id}
+                      onClick={() => handleSectorSelect(sector)}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs w-full text-left transition-colors"
+                      style={{ color: 'var(--text-muted)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(108,99,255,0.1)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <span>{sector.icon}</span>
+                      <span>{sector.name}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Separator */}
+          <div className="h-px bg-opacity-20 my-3" style={{ background: 'var(--border)' }} />
+
+          {/* Main Navigation Items */}
           {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
             <NavLink
               key={to}
               to={to}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-                ${collapsed ? 'justify-center' : ''}
+                ${collapsed ? 'justify-center' : ''} relative
                 ${isActive
                   ? 'text-white'
                   : 'hover:bg-opacity-50'
@@ -101,6 +184,11 @@ export default function DashboardLayout({ children }) {
             >
               <Icon size={18} className="flex-shrink-0" />
               {!collapsed && <span>{label}</span>}
+              {!collapsed && to === '/jobs' && jobsCount > 0 && (
+                <span className="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                  {jobsCount > 99 ? '99+' : jobsCount}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

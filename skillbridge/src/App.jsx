@@ -15,6 +15,10 @@ import RoadmapPage from './pages/RoadmapPage'
 import ProjectPage from './pages/ProjectPage'
 import AnalysisPage from './pages/AnalysisPage'
 import ProfilePage from './pages/ProfilePage'
+import NewsPage from './pages/NewsPage'
+import JobsPage from './pages/JobsPage'
+import JobDetailPage from './pages/JobDetailPage'
+import NewsDetailPage from './pages/NewsDetailPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export default function App() {
@@ -44,6 +48,10 @@ export default function App() {
             <Route path="/roadmap/:companyId/:jobRole" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
             <Route path="/project/:roadmapId" element={<ProtectedRoute><ProjectPage /></ProtectedRoute>} />
             <Route path="/analysis/:projectId" element={<ProtectedRoute><AnalysisPage /></ProtectedRoute>} />
+            <Route path="/news" element={<ProtectedRoute><NewsPage /></ProtectedRoute>} />
+            <Route path="/news/:articleId" element={<ProtectedRoute><NewsDetailPage /></ProtectedRoute>} />
+            <Route path="/jobs" element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
+            <Route path="/jobs/detail/:jobId" element={<ProtectedRoute><JobDetailPage /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
