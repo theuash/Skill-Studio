@@ -1,0 +1,56 @@
+[
+  {
+    "id": "web-development",
+    "name": "Web Development",
+    "icon": "🌐",
+    "color": "#6C63FF",
+    "description": "Build the web — from pixel-perfect frontends to scalable backend APIs and distributed systems powering billions of users.",
+    "popularRoles": ["Frontend Engineer", "Backend Engineer", "Full-Stack Engineer", "Software Engineer"],
+    "averageSalary": "$120,000 – $200,000"
+  },
+  {
+    "id": "data-science",
+    "name": "Data Science",
+    "icon": "📊",
+    "color": "#00D4FF",
+    "description": "Extract insights from massive datasets using statistics, machine learning, and powerful visualization tools to drive business decisions.",
+    "popularRoles": ["Data Scientist", "Data Analyst", "Analytics Engineer", "BI Engineer"],
+    "averageSalary": "$115,000 – $185,000"
+  },
+  {
+    "id": "ai-ml",
+    "name": "AI / Machine Learning",
+    "icon": "🤖",
+    "color": "#FF6B6B",
+    "description": "Build intelligent systems — from training foundation models to deploying production ML pipelines that change how people interact with technology.",
+    "popularRoles": ["ML Engineer", "AI Research Scientist", "MLOps Engineer", "AI Product Engineer"],
+    "averageSalary": "$150,000 – $300,000"
+  },
+  {
+    "id": "mobile-development",
+    "name": "Mobile Development",
+    "icon": "📱",
+    "color": "#4ECDC4",
+    "description": "Create seamless native and cross-platform mobile experiences for iOS and Android used by millions of people every day.",
+    "popularRoles": ["iOS Engineer", "Android Engineer", "React Native Developer", "Mobile Engineer"],
+    "averageSalary": "$120,000 – $190,000"
+  },
+  {
+    "id": "cloud-devops",
+    "name": "Cloud & DevOps",
+    "icon": "☁️",
+    "color": "#45B7D1",
+    "description": "Design, automate, and operate the infrastructure powering modern software — from CI/CD pipelines to multi-cloud Kubernetes deployments.",
+    "popularRoles": ["DevOps Engineer", "Platform Engineer", "SRE", "Cloud Architect"],
+    "averageSalary": "$130,000 – $210,000"
+  },
+  {
+    "id": "cybersecurity",
+    "name": "Cybersecurity",
+    "icon": "🔐",
+    "color": "#96CEB4",
+    "description": "Defend systems, detect threats, and build security-first products — protecting organizations from the ever-evolving landscape of cyber attacks.",
+    "popularRoles": ["Security Engineer", "Penetration Tester", "Security Analyst", "AppSec Engineer"],
+    "averageSalary": "$120,000 – $200,000"
+  }
+]
