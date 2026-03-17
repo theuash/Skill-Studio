@@ -4,6 +4,7 @@ import { Camera, Edit2, Save, X, User, Mail, Award, FolderGit2, Map, Star } from
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
+import CompanyLogo from '../components/shared/CompanyLogo'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import api from '../api/axios'
@@ -241,12 +242,11 @@ export default function ProfilePage() {
             {ROADMAP_HISTORY.map(roadmap => (
               <div key={roadmap.company} className="flex items-center gap-4 p-4 rounded-xl"
                 style={{ background: 'rgba(108,99,255,0.04)', border: '1px solid var(--border)' }}>
-                <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(108,99,255,0.08)' }}>
-                  <img src={`https://logo.clearbit.com/${roadmap.domain}`} alt={roadmap.company}
-                    className="w-7 h-7 object-contain"
-                    onError={e => { e.target.style.display = 'none' }} />
-                </div>
+                <CompanyLogo 
+                  logoUrl={`https://logo.clearbit.com/${roadmap.domain}`}
+                  companyName={roadmap.company}
+                  size={40}
+                />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{roadmap.company}</span>

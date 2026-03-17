@@ -309,8 +309,112 @@ const getMyProjects = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * POST /api/projects/generate-custom
+ * Generate a custom project challenge based on selected skills (no company context)
+ */
+const generateCustomProblem = asyncHandler(async (req, res) => {
+  const { skills, difficulty } = req.body;
+
+  if (!Array.isArray(skills) || skills.length < 2) {
+    return res.status(400).json({
+      success: false,
+      error: 'At least 2 skills are required.',
+    });
+  }
+
+  if (skills.length > 8) {
+    return res.status(400).json({
+      success: false,
+      error: 'Maximum 8 skills allowed.',
+    });
+  }
+
+  if (!['Beginner', 'Intermediate', 'Advanced'].includes(difficulty)) {
+    return res.status(400).json({
+      success: false,
+      error: 'Difficulty must be Beginner, Intermediate, or Advanced.',
+    });
+  }
+
+  const skillsList = skills
+    .map((s) => {
+      const name = typeof s === 'string' ? s : s.name;
+      const level = typeof s === 'object' && s.level ? s.level : difficulty;
+      return `${name} (${level})`;
+    })
+    .join(', ');
+
+  const systemPrompt = `You are a senior engineering mentor creating practical project challenges for developers.
+Respond with ONLY valid JSON. No markdown, no code fences, no text outside the JSON.`;
+
+  const userPrompt = `Create a project challenge for a developer who wants to practice these skills:
+${skills.map((s) => `- ${typeof s === 'string' ? s : s.name}`).join('\n')}
+
+Difficulty: ${difficulty}
+
+Requirements:
+- Real-world practical project (not a toy example)
+- ALL selected skills must be meaningfully used
+- Should be completable in 3-7 days
+- Clear and specific requirements
+
+Return this exact JSON and nothing else:
+{
+  "title": "string",
+  "description": "string - 3-4 sentences",
+  "techStack": ["skill1", "skill2"],
+  "technicalRequirements": [
+    { "skill": "string", "requirement": "string" }
+  ],
+  "acceptanceCriteria": ["string"],
+  "deliverables": ["string"],
+  "bonusFeatures": ["string"],
+  "difficulty": "${difficulty}",
+  "estimatedTime": "string e.g. 3-5 days"
+}`;
+
+  try {
+    const response = await groqChat(
+      [
+        {
+          role: 'system',
+          content: systemPrompt,
+        },
+        { role: 'user', content: userPrompt },
+      ],
+      { temperature: 0.7, max_tokens: 2000 }
+    );
+
+    const problemData = parseGroqJSON(response);
+
+    const problem = await ProjectProblem.create({
+      companyId: null,
+      companyName: 'Custom Challenge',
+      skills,
+      ...problemData,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Custom project challenge generated successfully.',
+      data: {
+        problemId: problem._id,
+        ...problem.toObject(),
+      },
+    });
+  } catch (err) {
+    console.error('❌ Custom problem generation failed:', err.message, err.stack);
+    return res.status(500).json({
+      success: false,
+      error: process.env.NODE_ENV === 'development' ? err.message : 'AI response was invalid, please try again',
+    });
+  }
+});
+
 module.exports = {
   generateProblem,
   analyzeProject,
   getMyProjects,
+  generateCustomProblem,
 };

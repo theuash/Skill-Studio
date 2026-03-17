@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MapPin, Clock, DollarSign, Users, ExternalLink, Bookmark } from 'lucide-react'
 import DashboardLayout from '../components/layout/DashboardLayout'
+import CompanyLogo from '../components/shared/CompanyLogo'
 import api from '../api/axios'
 
 const JobDetailPage = () => {
@@ -149,15 +150,11 @@ const JobDetailPage = () => {
           {/* LEFT: Job info */}
           <div style={{ display: 'flex', gap: 20, flex: 1 }}>
             {/* Company logo */}
-            <div style={{
-              width: 64, height: 64, borderRadius: 16, flexShrink: 0,
-              background: 'linear-gradient(135deg, var(--accent), var(--secondary))',
-              display: 'flex', alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 28, fontWeight: 700, color: 'white'
-            }}>
-              {companyInitial}
-            </div>
+            <CompanyLogo
+              logoUrl={company.logo || `https://logo.clearbit.com/${company.domain}`}
+              companyName={companyName}
+              size={64}
+            />
             <div>
               <h1 style={{
                 color: 'var(--text)',

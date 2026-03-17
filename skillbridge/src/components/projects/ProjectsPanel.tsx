@@ -602,100 +602,121 @@ export default function ProjectsPanel({ companyName, skills, companyId, onClose 
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-        className="fixed top-0 right-0 h-full w-full max-w-lg z-50 flex flex-col"
-        style={{ background: 'var(--bg-base)', borderLeft: '1px solid var(--glass-border)' }}
-      >
-        {/* Header - Fixed */}
-        <div className="flex items-center justify-between p-4 border-b flex-shrink-0" style={{ borderColor: 'var(--border)' }}>
-          <h1 className="font-heading font-bold text-lg" style={{ color: 'var(--text)' }}>
-            Project Challenge
-          </h1>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-opacity-20 transition-colors"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            <X size={20} />
-          </button>
-        </div>
+      <>
+        {/* Overlay backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0"
+          style={{
+            background: 'rgba(0, 0, 0, 0.7)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 999,
+          }}
+        />
 
-        {/* Content - Scrollable */}
-        <div className="flex-1 overflow-y-auto">
-          {state === 'generating' && <LoadingState skillsCount={skills?.length || 0} />}
-          {state === 'problem' && (
-            <ProblemState
-              problem={problem}
-              githubUrl={githubUrl}
-              setGithubUrl={setGithubUrl}
-              urlError={urlError}
-              submitting={submitting}
-            />
-          )}
-          {state === 'analysis' && (
-            <AnalysisState
-              analysis={analysis}
-              onTryAgain={handleTryAgain}
-              companyId={companyId}
-            />
-          )}
-        </div>
-
-        {/* Footer - Fixed (only show for problem state) */}
-        {state === 'problem' && (
-          <div
-            className="flex-shrink-0 p-4 border-t"
-            style={{
-              background: 'var(--bg-base)',
-              borderColor: 'var(--border)',
-              backdropFilter: 'blur(10px)'
-            }}
-          >
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <div className="relative">
-                  <Github size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
-                  <input
-                    type="url"
-                    placeholder="https://github.com/yourusername/your-repo"
-                    value={githubUrl}
-                    onChange={(e) => setGithubUrl(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none"
-                    style={{
-                      background: 'var(--background)',
-                      border: urlError ? '1px solid #EF4444' : '1px solid var(--border)',
-                      color: 'var(--text)',
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = 'var(--accent)'
-                      e.target.style.boxShadow = '0 0 0 3px rgba(108,99,255,0.15)'
-                    }}
-                    onBlur={(e) => {
-                      if (!urlError) {
-                        e.target.style.borderColor = 'var(--border)'
-                        e.target.style.boxShadow = 'none'
-                      }
-                    }}
-                  />
-                </div>
-                {urlError && (
-                  <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-                    <span>⚠</span>{urlError}
-                  </p>
-                )}
-              </div>
-
-              <Button type="submit" loading={submitting} className="w-full">
-                {submitting ? loadingTexts[loadingTextIdx] : 'Analyze My Project →'}
-              </Button>
-            </form>
+        {/* Panel */}
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          className="fixed top-0 right-0 h-full w-full max-w-lg z-50 flex flex-col"
+          style={{
+            background: '#0D0F1A',
+            borderLeft: '1px solid rgba(108,99,255,0.2)',
+            boxShadow: '-20px 0 60px rgba(0, 0, 0, 0.6)',
+            zIndex: 1000,
+          }}
+        >
+          {/* Header - Fixed */}
+          <div className="flex items-center justify-between p-4 border-b flex-shrink-0" style={{ borderColor: 'rgba(108,99,255,0.2)', background: '#0D0F1A' }}>
+            <h1 className="font-heading font-bold text-lg" style={{ color: 'var(--text)' }}>
+              Project Challenge
+            </h1>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg hover:bg-opacity-20 transition-colors"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              <X size={20} />
+            </button>
           </div>
-        )}
-      </motion.div>
+
+          {/* Content - Scrollable */}
+          <div className="flex-1 overflow-y-auto" style={{ background: '#0D0F1A' }}>
+            {state === 'generating' && <LoadingState skillsCount={skills?.length || 0} />}
+            {state === 'problem' && (
+              <ProblemState
+                problem={problem}
+                githubUrl={githubUrl}
+                setGithubUrl={setGithubUrl}
+                urlError={urlError}
+                submitting={submitting}
+              />
+            )}
+            {state === 'analysis' && (
+              <AnalysisState
+                analysis={analysis}
+                onTryAgain={handleTryAgain}
+                companyId={companyId}
+              />
+            )}
+          </div>
+
+          {/* Footer - Fixed (only show for problem state) */}
+          {state === 'problem' && (
+            <div
+              className="flex-shrink-0 p-4 border-t"
+              style={{
+                background: '#0D0F1A',
+                borderColor: 'rgba(108,99,255,0.2)',
+              }}
+            >
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <div className="relative">
+                    <Github size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+                    <input
+                      type="url"
+                      placeholder="https://github.com/yourusername/your-repo"
+                      value={githubUrl}
+                      onChange={(e) => setGithubUrl(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none"
+                      style={{
+                        background: 'var(--surface)',
+                        border: urlError ? '1px solid #EF4444' : '1px solid var(--border)',
+                        color: 'var(--text)',
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = 'var(--accent)'
+                        e.target.style.boxShadow = '0 0 0 3px rgba(108,99,255,0.15)'
+                      }}
+                      onBlur={(e) => {
+                        if (!urlError) {
+                          e.target.style.borderColor = 'var(--border)'
+                          e.target.style.boxShadow = 'none'
+                        }
+                      }}
+                    />
+                  </div>
+                  {urlError && (
+                    <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                      <span>⚠</span>{urlError}
+                    </p>
+                  )}
+                </div>
+
+                <Button type="submit" loading={submitting} className="w-full">
+                  {submitting ? loadingTexts[loadingTextIdx] : 'Analyze My Project →'}
+                </Button>
+              </form>
+            </div>
+          )}
+        </motion.div>
+      </>
     </AnimatePresence>
   )
 }

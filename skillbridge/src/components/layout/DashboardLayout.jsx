@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }) {
     <div className="flex min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Sidebar */}
       <motion.aside
-        animate={{ width: collapsed ? 72 : 260, x: 0 }}
+        animate={{ width: collapsed ? 100 : 260, x: 0 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         className="fixed top-0 left-0 h-screen z-40 flex flex-col overflow-hidden hidden md:flex"
         style={{
@@ -217,8 +217,10 @@ export default function DashboardLayout({ children }) {
         {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed(c => !c)}
-          className="absolute -right-3 top-20 w-6 h-6 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-110"
+          className="absolute w-6 h-6 rounded-full flex items-center justify-center shadow-md transition-transform hover:scale-110"
           style={{
+            right: collapsed ? '12px' : '8px',
+            top: '80px',
             background: 'var(--surface)',
             border: '1px solid var(--border)',
             color: 'var(--text-muted)',

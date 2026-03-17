@@ -13,6 +13,7 @@ import SectorPage from './pages/SectorPage'
 import CompanyDetailsPage from './pages/CompanyDetailsPage'
 import RoadmapPage from './pages/RoadmapPage'
 import ProjectPage from './pages/ProjectPage'
+import ProjectsPage from './pages/ProjectsPage'
 import AnalysisPage from './pages/AnalysisPage'
 import ProfilePage from './pages/ProfilePage'
 import NewsPage from './pages/NewsPage'
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="/sector/:sectorName" element={<ProtectedRoute><SectorPage /></ProtectedRoute>} />
             <Route path="/company/:companyId" element={<ProtectedRoute><CompanyDetailsPage /></ProtectedRoute>} />
             <Route path="/roadmap/:companyId/:jobRole" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
+            <Route path="/projects" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
             <Route path="/project/:roadmapId" element={<ProtectedRoute><ProjectPage /></ProtectedRoute>} />
             <Route path="/analysis/:projectId" element={<ProtectedRoute><AnalysisPage /></ProtectedRoute>} />
             <Route path="/news" element={<ProtectedRoute><NewsPage /></ProtectedRoute>} />

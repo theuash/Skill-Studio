@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Map, FolderGit2, Zap, ChevronDown, ArrowRight, Clock, TrendingUp, CheckCircle, AlertCircle } from 'lucide-react'
 import DashboardLayout from '../components/layout/DashboardLayout'
+import CompanyLogo from '../components/shared/CompanyLogo'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/axios'
 import { SECTORS } from '../utils/data'
@@ -82,10 +83,11 @@ function ContinueLearningCard({ roadmap, index, onContinue }) {
       onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
       onMouseLeave={e => e.currentTarget.style.opacity = '1'}
     >
-      <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm text-white"
-        style={{ background: `linear-gradient(135deg, var(--accent), rgba(0,212,255,0.7))` }}>
-        {roadmap.companyInitial}
-      </div>
+      <CompanyLogo
+        logoUrl={roadmap.company?.logo || `https://logo.clearbit.com/${roadmap.company?.domain}`}
+        companyName={roadmap.companyName}
+        size={48}
+      />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
           <span className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{roadmap.companyName}</span>
@@ -135,10 +137,11 @@ function ProjectCard({ project, index, onViewResults }) {
       style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       onClick={() => onViewResults(project.analysisId)}
     >
-      <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-sm text-white"
-        style={{ background: `linear-gradient(135deg, var(--secondary), rgba(108,99,255,0.7))` }}>
-        {project.companyName.charAt(0)}
-      </div>
+      <CompanyLogo 
+        logoUrl={project.company?.logo}
+        companyName={project.companyName}
+        size={48}
+      />
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-sm mb-1 truncate" style={{ color: 'var(--text)' }}>
           {project.projectTitle}

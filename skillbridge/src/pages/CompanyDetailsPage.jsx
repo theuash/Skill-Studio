@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, MapPin, ExternalLink, FileText, GitBranch, X } from 'lucide-react'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Button from '../components/ui/Button'
+import CompanyLogo from '../components/shared/CompanyLogo'
 import toast from 'react-hot-toast'
 import api from '../api/axios'
 import { COMPANIES } from '../utils/data'
@@ -324,20 +325,11 @@ export default function CompanyDetailsPage() {
 
           <div className="flex items-start gap-6 mb-8">
             {/* Company Logo */}
-            <div
-              className="w-24 h-24 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(108,99,255,0.08)', border: '1px solid var(--border)' }}
-            >
-              <img
-                src={`https://logo.clearbit.com/${company.domain}`}
-                alt={company.name}
-                className="w-16 h-16 object-contain"
-                onError={e => {
-                  e.target.style.display = 'none'
-                  e.target.parentElement.innerHTML = `<span style="font-size:2rem">${company.name[0]}</span>`
-                }}
-              />
-            </div>
+            <CompanyLogo 
+              logoUrl={company.logo || `https://logo.clearbit.com/${company.domain}`}
+              companyName={company.name}
+              size={96}
+            />
 
             {/* Company Info */}
             <div className="flex-1">

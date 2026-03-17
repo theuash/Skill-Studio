@@ -95,6 +95,8 @@ const getJobs = async (req, res) => {
             ? {
                 _id: companyDoc._id,
                 name: companyDoc.name,
+                domain: companyDoc.domain,
+                logo: companyDoc.logo,
                 website: companyDoc.website || '',
                 description: companyDoc.description,
                 location: companyDoc.location,
@@ -226,6 +228,8 @@ const getJobById = async (req, res) => {
         ? {
             _id: company._id,
             name: company.name,
+            domain: company.domain,
+            logo: company.logo,
             sector: company.sector,
             description: company.description,
             website: company.website || '',

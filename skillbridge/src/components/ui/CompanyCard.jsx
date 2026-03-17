@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowRight, ExternalLink } from 'lucide-react'
+import CompanyLogo from '../shared/CompanyLogo'
 
 const LEVEL_COLORS = {
   Beginner: { bg: 'rgba(76,205,196,0.15)', text: '#4ECDC4', border: 'rgba(76,205,196,0.3)' },
@@ -47,20 +48,11 @@ export default function CompanyCard({ company, sectorId }) {
       >
         {/* Logo */}
         <div className="flex items-start justify-between mb-4">
-          <div
-            className="w-14 h-14 rounded-2xl overflow-hidden flex items-center justify-center"
-            style={{ background: 'rgba(108,99,255,0.08)', border: '1px solid var(--border)' }}
-          >
-            <img
-              src={`https://logo.clearbit.com/${company.domain}`}
-              alt={company.name}
-              className="w-10 h-10 object-contain"
-              onError={e => {
-                e.target.style.display = 'none'
-                e.target.parentElement.innerHTML = `<span style="font-size:1.5rem">${company.name[0]}</span>`
-              }}
-            />
-          </div>
+          <CompanyLogo 
+            logoUrl={company.logo || `https://logo.clearbit.com/${company.domain}`}
+            companyName={company.name}
+            size={56}
+          />
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             style={{ background: 'rgba(108,99,255,0.12)' }}

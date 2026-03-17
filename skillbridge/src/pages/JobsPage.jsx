@@ -5,6 +5,7 @@ import { MapPin, Clock, DollarSign, Bookmark, BookmarkCheck, Search, Filter, Bri
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
+import CompanyLogo from '../components/shared/CompanyLogo'
 import api from '../api/axios'
 import toast from 'react-hot-toast'
 
@@ -87,12 +88,11 @@ function JobCard({ job, onSave, savedJobs = [], onCardClick }) {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div
-            className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg"
-            style={{ background: 'linear-gradient(135deg, var(--accent), rgba(0,212,255,0.7))' }}
-          >
-            {companyName?.charAt(0) || ''}
-          </div>
+          <CompanyLogo 
+            logoUrl={job.company?.logo || (job.company?.domain ? `https://logo.clearbit.com/${job.company.domain}` : undefined)}
+            companyName={companyName}
+            size={48}
+          />
           <div>
             <h3 className="font-semibold text-lg" style={{ color: 'var(--text)' }}>
               {title}
