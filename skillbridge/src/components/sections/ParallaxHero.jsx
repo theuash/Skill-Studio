@@ -13,13 +13,13 @@ function FloatingOrb({ size, x, y, color, delay = 0, duration = 8 }) {
         height: size,
         left: x,
         top: y,
-        background: `radial-gradient(circle, ${color}40 0%, ${color}08 60%, transparent 100%)`,
+        background: `radial-gradient(circle, ${color}25 0%, ${color}08 60%, transparent 100%)`,
         filter: 'blur(1px)',
       }}
       animate={{
-        y: [0, -30, 0],
-        scale: [1, 1.1, 1],
-        opacity: [0.5, 0.8, 0.5],
+        y: [0, -25, 0],
+        scale: [1, 1.08, 1],
+        opacity: [0.6, 0.8, 0.6],
       }}
       transition={{
         duration,
@@ -34,10 +34,10 @@ function FloatingOrb({ size, x, y, color, delay = 0, duration = 8 }) {
 function GridLines() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
+      <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="var(--accent)" strokeWidth="1" />
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="var(--primary)" strokeWidth="0.5" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#grid)" />
@@ -50,7 +50,7 @@ function Particle({ x, y, delay }) {
   return (
     <motion.div
       className="absolute w-1 h-1 rounded-full"
-      style={{ left: x, top: y, background: 'var(--secondary)' }}
+      style={{ left: x, top: y, background: 'var(--primary)' }}
       animate={{ opacity: [0, 1, 0], scale: [0, 1.5, 0] }}
       transition={{ duration: 3, delay, repeat: Infinity, ease: 'easeInOut' }}
     />
@@ -83,10 +83,10 @@ export default function ParallaxHero() {
 
       {/* Orbs layer — parallax */}
       <motion.div className="absolute inset-0 pointer-events-none" style={{ y: y1 }}>
-        <FloatingOrb size={600} x="60%" y="-15%" color="#6C63FF" delay={0} duration={10} />
-        <FloatingOrb size={400} x="-10%" y="30%" color="#00D4FF" delay={2} duration={12} />
-        <FloatingOrb size={300} x="70%" y="55%" color="#FF6B6B" delay={1} duration={9} />
-        <FloatingOrb size={200} x="20%" y="10%" color="#6C63FF" delay={3} duration={11} />
+        <FloatingOrb size={500} x="55%" y="-10%" color="#6C6E36" delay={0} duration={10} />
+        <FloatingOrb size={350} x="-8%" y="25%" color="#44444E" delay={2} duration={12} />
+        <FloatingOrb size={250} x="70%" y="50%" color="#6C6E36" delay={1} duration={9} />
+        <FloatingOrb size={180} x="15%" y="5%" color="#44444E" delay={3} duration={11} />
       </motion.div>
 
       {/* Particles */}
@@ -106,8 +106,8 @@ export default function ParallaxHero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
           style={{
-            background: 'rgba(108,99,255,0.12)',
-            border: '1px solid rgba(108,99,255,0.3)',
+            background: 'rgba(68, 68, 78, 0.08)',
+            border: '1px solid rgba(108, 110, 54, 0.25)',
           }}
         >
           <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
@@ -120,10 +120,11 @@ export default function ParallaxHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="font-heading font-extrabold leading-[1.08] tracking-tight mb-6"
+          className="font-heading font-extrabold leading-[1.1] tracking-tight mb-6"
           style={{
-            fontSize: 'clamp(2.8rem, 8vw, 6.5rem)',
+            fontSize: 'clamp(2.8rem, 8vw, 6rem)',
             color: 'var(--text)',
+            letterSpacing: '-0.02em',
           }}
         >
           Bridge the Gap
@@ -154,13 +155,13 @@ export default function ParallaxHero() {
         >
           <Link to="/register">
             <motion.button
-              whileHover={{ scale: 1.04, boxShadow: '0 0 40px rgba(108,99,255,0.5)' }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base text-white cursor-pointer"
-              style={{ background: 'linear-gradient(135deg, var(--accent), var(--secondary))' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 8px 32px rgba(108, 110, 54, 0.25)' }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base text-white cursor-pointer transition-all"
+              style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}
             >
               Start for Free
-              <ArrowRight size={18} />
+              <ArrowRight size={18} strokeWidth={2.5} />
             </motion.button>
           </Link>
           <motion.button

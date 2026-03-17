@@ -4,6 +4,12 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Download, Share2, TrendingUp, TrendingDown, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import Button from '../components/ui/Button'
+import CodeQualityIcon from '../components/icons/CodeQualityIcon'
+import ArchitectureIcon from '../components/icons/ArchitectureIcon'
+import BestPracticesIcon from '../components/icons/BestPracticesIcon'
+import TestingIcon from '../components/icons/TestingIcon'
+import PerformanceIcon from '../components/icons/PerformanceIcon'
+import SecurityIcon from '../components/icons/SecurityIcon'
 
 const DEMO_ANALYSIS = {
   overallScore: 78,
@@ -14,7 +20,7 @@ const DEMO_ANALYSIS = {
       title: 'Code Quality',
       score: 82,
       color: '#6C63FF',
-      icon: '🧹',
+      iconComponent: CodeQualityIcon,
       details: 'Clean, readable code with consistent naming conventions. ESLint rules properly configured. Minor issues with function length in some controllers.',
       items: ['✅ Consistent code style', '✅ Meaningful variable names', '⚠️ Some functions exceed 50 lines', '✅ Proper error handling'],
     },
@@ -22,7 +28,7 @@ const DEMO_ANALYSIS = {
       title: 'Architecture',
       score: 85,
       color: '#00D4FF',
-      icon: '🏗️',
+      iconComponent: ArchitectureIcon,
       details: 'Well-structured MVC pattern with proper separation of concerns. Service layer correctly abstracts business logic from routes.',
       items: ['✅ MVC pattern followed', '✅ Service layer present', '✅ Middleware well-organized', '⚠️ Missing API versioning'],
     },
@@ -30,7 +36,7 @@ const DEMO_ANALYSIS = {
       title: 'Best Practices',
       score: 74,
       color: '#4ECDC4',
-      icon: '📋',
+      iconComponent: BestPracticesIcon,
       details: 'Environment variables properly handled. Input validation present but inconsistent. SQL injection prevention via parameterized queries.',
       items: ['✅ .env file properly used', '✅ Parameterized SQL queries', '⚠️ Missing rate limiting', '❌ No API documentation'],
     },
@@ -38,7 +44,7 @@ const DEMO_ANALYSIS = {
       title: 'Test Coverage',
       score: 58,
       color: '#FF6B6B',
-      icon: '🧪',
+      iconComponent: TestingIcon,
       details: 'Basic unit tests present but integration tests are missing. Coverage at 42% — below the 80% requirement. Jest configured correctly.',
       items: ['✅ Jest configured', '⚠️ Coverage at 42% (target: 80%)', '❌ No integration tests', '✅ Critical paths tested'],
     },
@@ -46,7 +52,7 @@ const DEMO_ANALYSIS = {
       title: 'Performance',
       score: 80,
       color: '#FFEAA7',
-      icon: '⚡',
+      iconComponent: PerformanceIcon,
       details: 'Redis caching implemented for frequent queries. Database queries are optimized with proper indexing. Image optimization missing.',
       items: ['✅ Redis caching implemented', '✅ Database indexes present', '✅ Pagination implemented', '⚠️ No image compression'],
     },
@@ -54,7 +60,7 @@ const DEMO_ANALYSIS = {
       title: 'Security',
       score: 88,
       color: '#A29BFE',
-      icon: '🔐',
+      iconComponent: SecurityIcon,
       details: 'JWT implemented correctly with refresh token rotation. CORS configured. Bcrypt used for password hashing. CSRF protection present.',
       items: ['✅ JWT with refresh tokens', '✅ CORS properly set', '✅ Bcrypt password hashing', '✅ CSRF protection'],
     },
@@ -116,7 +122,7 @@ function CircularProgress({ score, size = 140 }) {
   )
 }
 
-function ScoreBar({ title, score, color, icon, details, items, delay }) {
+function ScoreBar({ title, score, color, iconComponent: IconComponent, details, items, delay }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -124,14 +130,14 @@ function ScoreBar({ title, score, color, icon, details, items, delay }) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
-      className="rounded-2xl overflow-hidden cursor-pointer"
+      className="rounded-2xl overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
       style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       onClick={() => setExpanded(e => !e)}
     >
       <div className="p-5">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span>{icon}</span>
+          <div className="flex items-center gap-3">
+            {IconComponent && <IconComponent size={20} style={{ color }} />}
             <span className="font-heading font-semibold text-sm" style={{ color: 'var(--text)' }}>{title}</span>
           </div>
           <div className="flex items-center gap-3">

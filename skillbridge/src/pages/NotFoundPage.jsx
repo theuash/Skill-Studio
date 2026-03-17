@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Home, ArrowLeft } from 'lucide-react'
 import Logo from '../components/ui/Logo'
 import ThemeToggle from '../components/ui/ThemeToggle'
+import LinkIcon from '../components/icons/LinkIcon'
 
 export default function NotFoundPage() {
   const navigate = useNavigate()
@@ -71,13 +72,13 @@ export default function NotFoundPage() {
               transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
             >
               <div
-                className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl shadow-2xl"
+                className="w-20 h-20 rounded-3xl flex items-center justify-center shadow-2xl"
                 style={{
                   background: 'linear-gradient(135deg, var(--accent), var(--secondary))',
                   boxShadow: '0 0 60px rgba(108,99,255,0.4)',
                 }}
               >
-                🔗
+                <LinkIcon size={40} style={{ color: 'white' }} />
               </div>
             </motion.div>
           </motion.div>

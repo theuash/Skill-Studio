@@ -291,7 +291,7 @@ export default function RoadmapPage() {
                 </div>
                 <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
                   {checked.size} of {nodes.length} topics marked as known
-                  {readyForProject && ' — You\'re ready for a project! 🎉'}
+                  {readyForProject && ' — You\'re ready for a project!'}
                 </p>
               </motion.div>
 
