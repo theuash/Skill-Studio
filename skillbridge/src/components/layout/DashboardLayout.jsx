@@ -232,13 +232,13 @@ export default function DashboardLayout({ children }) {
       <motion.main
         animate={{ marginLeft: collapsed ? 72 : 260 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="flex-1 min-h-screen md:block hidden"
+        className="hidden md:block flex-1 min-h-screen"
       >
         {children}
       </motion.main>
 
       {/* Mobile main content */}
-      <div className="flex-1 min-h-screen md:hidden">
+      <div className="md:hidden flex-1 min-h-screen">
         {children}
       </div>
     </div>

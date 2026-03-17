@@ -14,24 +14,20 @@ const { protect } = require('../middleware/authMiddleware')
 // All job routes require authentication
 router.use(protect)
 
+// Specific routes BEFORE wildcard routes
+router.get('/count', getJobsCount)
+router.get('/saved/list', getSavedJobs)
+router.get('/saved/details', getSavedJobsDetails)
+
 // Get all jobs with filtering
 router.get('/', getJobs)
 
-// Get jobs count for sidebar badge
-router.get('/count', getJobsCount)
-
-// Get single job by ID
+// Get single job by ID (must be last)
 router.get('/:jobId', getJobById)
 
 // Save/unsave a job
 router.post('/saved/:jobId', saveJob)
 router.delete('/saved/:jobId', saveJob)
-
-// Get user's saved job IDs
-router.get('/saved/list', getSavedJobs)
-
-// Get user's saved jobs with full details
-router.get('/saved/details', getSavedJobsDetails)
 
 // Create a new job (admin/seeding)
 router.post('/', createJob)

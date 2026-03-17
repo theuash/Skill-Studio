@@ -92,14 +92,27 @@ export default function JobDetailPage() {
   const fetchJob = async () => {
     try {
       setLoading(true)
+      setError(null)
+      console.log('Fetching job ID:', jobId)
+      
       const res = await api.get(`/jobs/${jobId}`)
+      console.log('Job detail response:', res.data)
+      
       if (!res.data?.success) {
         throw new Error(res.data?.error || 'Unable to load job')
       }
-      setJob(res.data.data)
+      
+      const jobData = res.data.data
+      if (!jobData || !jobData.title) {
+        throw new Error('Invalid job data received')
+      }
+      
+      setJob(jobData)
+      setError(null)
     } catch (err) {
-      console.error('Job detail error:', err)
-      setError(err.message || 'Failed to load job')
+      console.error('Job detail error:', err.message)
+      setError(err.message || 'Failed to load job details')
+      setJob(null)
     } finally {
       setLoading(false)
     }

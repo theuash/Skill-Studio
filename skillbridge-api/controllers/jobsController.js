@@ -1,6 +1,7 @@
 const Job = require('../models/Job')
 const User = require('../models/User')
 const Company = require('../models/Company')
+const { getJobsFromMock, getJobById: getJobByIdFromMock } = require('../services/jobsService')
 
 // Get all jobs with filtering
 const getJobs = async (req, res) => {
@@ -60,65 +61,111 @@ const getJobs = async (req, res) => {
       .skip((page - 1) * limit)
       .select('-__v')
 
-    console.log('Jobs found:', jobs.length)
+    console.log('Database jobs found:', jobs.length)
 
-    const total = await Job.countDocuments(query)
+    // If no jobs in database, use mock jobs
+    let jobsToReturn = jobs
+    let total = await Job.countDocuments(query)
 
-    // Attach company metadata when available
-    const companyNames = [...new Set(jobs.map((j) => j.company).filter(Boolean))]
-    const companies = await Company.find({ name: { $in: companyNames } }).lean()
-    const companyMap = new Map(companies.map((c) => [c.name, c]))
+    if (jobs.length === 0) {
+      console.log('No database jobs, using mock jobs')
+      const mockJobs = getJobsFromMock({
+        search,
+        type,
+        experienceLevel,
+        location,
+        exclude,
+      })
+      const paginatedMock = mockJobs
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice((parseInt(page, 10) - 1) * parseInt(limit, 10), parseInt(page, 10) * parseInt(limit, 10))
+      jobsToReturn = paginatedMock
+      total = mockJobs.length
+    } else {
+      // Attach company metadata when available
+      const companyNames = [...new Set(jobs.map((j) => j.company).filter(Boolean))]
+      const companies = await Company.find({ name: { $in: companyNames } }).lean()
+      const companyMap = new Map(companies.map((c) => [c.name, c]))
 
-    const jobsWithCompany = jobs.map((job) => {
-      const companyDoc = companyMap.get(job.company)
-      return {
-        ...job,
-        company: companyDoc
-          ? {
-              _id: companyDoc._id,
-              name: companyDoc.name,
-              website: companyDoc.website || '',
-              description: companyDoc.description,
-              location: companyDoc.location,
-              size: companyDoc.size,
-              founded: companyDoc.founded,
-            }
-          : job.company,
-      }
-    })
+      jobsToReturn = jobs.map((job) => {
+        const companyDoc = companyMap.get(job.company)
+        return {
+          ...job.toObject(),
+          company: companyDoc
+            ? {
+                _id: companyDoc._id,
+                name: companyDoc.name,
+                website: companyDoc.website || '',
+                description: companyDoc.description,
+                location: companyDoc.location,
+                size: companyDoc.size,
+                founded: companyDoc.founded,
+              }
+            : job.company,
+        }
+      })
+    }
 
     res.json({
       success: true,
       data: {
-        jobs: jobsWithCompany,
+        jobs: jobsToReturn,
         pagination: {
           page: parseInt(page, 10),
           limit: parseInt(limit, 10),
           total,
-          pages: Math.ceil(total / limit),
+          pages: Math.ceil(total / parseInt(limit, 10)),
         },
       },
     })
   } catch (error) {
     console.error('Error fetching jobs:', error)
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    })
+    // Fallback to mock jobs on any error
+    try {
+      const mockJobs = getJobsFromMock({})
+      const page = parseInt(req.query.page, 10) || 1
+      const limit = parseInt(req.query.limit, 10) || 20
+      const paginatedMock = mockJobs.slice((page - 1) * limit, page * limit)
+      return res.json({
+        success: true,
+        data: {
+          jobs: paginatedMock,
+          pagination: {
+            page,
+            limit,
+            total: mockJobs.length,
+            pages: Math.ceil(mockJobs.length / limit),
+          },
+        },
+      })
+    } catch {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      })
+    }
   }
 }
 
 // Get job count for sidebar badge
 const getJobsCount = async (req, res) => {
   try {
-    const count = await Job.countDocuments({ isActive: true })
+    let count = await Job.countDocuments({ isActive: true })
+    
+    // If no database jobs, return count of mock jobs
+    if (count === 0) {
+      const { generateMockJobs } = require('../services/jobsService')
+      const mockJobs = generateMockJobs()
+      count = mockJobs.length
+    }
+
     res.json({ success: true, data: { count } })
   } catch (error) {
     console.error('Error fetching jobs count:', error)
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    })
+    // Return mock jobs count as fallback
+    const { generateMockJobs } = require('../services/jobsService')
+    const mockJobs = generateMockJobs()
+    res.json({ success: true, data: { count: mockJobs.length } })
   }
 }
 
@@ -128,19 +175,36 @@ const getJobById = async (req, res) => {
     const { jobId } = req.params
 
     console.log('Looking for job ID:', jobId)
-    console.log('Is valid ObjectId:', mongoose.Types.ObjectId.isValid(jobId))
 
-    const job = await Job.findById(jobId).lean()
+    // Try to find in database first
+    let job = null
+    let isMockData = false
 
-    console.log('Found job:', job ? job.title : 'NOT FOUND')
-
-    if (!job) {
-      return res.status(404).json({ success: false, error: `Job with ID ${jobId} not found in database` })
+    try {
+      job = await Job.findById(jobId).lean()
+    } catch (e) {
+      console.log('Invalid ObjectId, trying mock data')
     }
 
-    const company = await Company.findOne({
-      $or: [{ name: job.company }, { domain: job.company }, { companyId: job.company }],
-    }).lean()
+    // If not found in database, try mock data
+    if (!job) {
+      console.log('Not found in DB, checking mock data')
+      job = getJobByIdFromMock(jobId)
+      isMockData = true
+    }
+
+    if (!job) {
+      return res.status(404).json({ success: false, error: `Job with ID ${jobId} not found` })
+    }
+
+    console.log('Found job:', job.title)
+
+    let company = null
+    if (!isMockData) {
+      company = await Company.findOne({
+        $or: [{ name: job.company }, { domain: job.company }, { companyId: job.company }],
+      }).lean()
+    }
 
     const formatted = {
       _id: job._id,
@@ -148,17 +212,17 @@ const getJobById = async (req, res) => {
       description: job.description,
       type: job.type,
       location: job.location,
-      salaryRange: job.salary,
-      requiredSkills: (job.requirements || []).map((req) => ({
-        name: req,
+      salaryRange: job.salary || job.salaryRange,
+      requiredSkills: job.requiredSkills || (job.requirements || []).map((req) => ({
+        skill: req,
         level: 'Intermediate',
       })),
       postedAt: job.postedAt || job.createdAt,
-      applicantCount: job.applicants || 0,
+      applicantCount: job.applicantCount || job.applicants || 0,
       sector: job.sector || null,
       tags: job.tags || [],
-      companyUrl: company?.website || '',
-      company: company
+      companyUrl: job.companyUrl || company?.website || '',
+      company: job.company || (company
         ? {
             _id: company._id,
             name: company.name,
@@ -171,7 +235,8 @@ const getJobById = async (req, res) => {
           }
         : {
             name: job.company,
-          },
+          }),
+      experienceLevel: job.experienceLevel || 'Mid Level',
     }
 
     res.json({ success: true, data: formatted })

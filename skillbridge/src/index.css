@@ -40,7 +40,7 @@ body {
   color: var(--text);
   font-family: 'Inter', 'Segoe UI', sans-serif;
   font-weight: 400;
-  transitio: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
 }
 

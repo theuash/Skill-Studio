@@ -5,6 +5,7 @@ const {
   updateProfile,
   getDashboardStats,
   getUserSkills,
+  getLearningProgress,
   deleteAccount,
   updateProfileValidation,
 } = require('../controllers/userController');
@@ -21,6 +22,9 @@ router.put('/profile', updateProfileValidation, validate, updateProfile);
 
 // GET /api/user/dashboard-stats
 router.get('/dashboard-stats', getDashboardStats);
+
+// GET /api/user/learning-progress
+router.get('/learning-progress', getLearningProgress);
 
 // GET /api/user/skills
 router.get('/skills', getUserSkills);

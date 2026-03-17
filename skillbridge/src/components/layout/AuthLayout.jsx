@@ -51,20 +51,26 @@ function AnimatedVisual() {
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           className="mb-8"
         >
-          <div className="w-24 h-24 rounded-3xl mx-auto flex items-center justify-center mb-6"
-            style={{ background: 'linear-gradient(135deg, #6C63FF, #00D4FF)', boxShadow: '0 0 60px rgba(108,99,255,0.4)' }}>
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
-              <path d="M3 6L12 2L21 6V12C21 16.5 16.5 20.5 12 22C7.5 20.5 3 16.5 3 12V6Z" stroke="white" strokeWidth="2" fill="rgba(255,255,255,0.1)" />
-              <path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <div className="mb-6 flex justify-center">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <img
+                src="/assets/logo.png"
+                alt="SkillStudio Logo"
+                className="flex-shrink-0 transition-transform group-hover:scale-105 rounded-xl"
+                style={{
+                  width: 64,
+                  height: 64,
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 0 20px rgba(108,99,255,0.3))'
+                }}
+              />
+              <span className="font-heading font-bold text-2xl text-white">
+                Skill<span style={{ background: 'linear-gradient(90deg, #6C63FF, #00D4FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Studio</span>
+              </span>
+            </Link>
           </div>
 
-          <h2 className="font-heading font-extrabold text-3xl text-white mb-3">
-            Welcome to<br />
-            <span style={{ background: 'linear-gradient(90deg, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Skill Studio
-            </span>
-          </h2>
+  
           <p className="text-gray-400 text-sm leading-relaxed">
             Your AI-powered companion for navigating the tech job market.
           </p>
