@@ -5,13 +5,13 @@
 
 :root {
   /* Light mode */
-  --bg: #e1f4f2;
-  --surface: #a297a7;
-  --primary: #44444E;
+  --bg: #e1eaf4;
+  --surface: #b0c1c2;
+  --primary: #efe183;
   --secondary: #6C6E36;
-  --accent: #44444E;
-  --text: #44444E;
-  --text-muted: #6B7280;
+  --accent: #1a45a2;
+  --text: #180e0e;
+  --text-muted: #000000;
   --border: #E8DCC8;
 }
 
