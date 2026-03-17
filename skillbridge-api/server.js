@@ -15,6 +15,8 @@ const sectorRoutes = require('./routes/sectors');
 const roadmapRoutes = require('./routes/roadmap');
 const projectRoutes = require('./routes/project');
 const userRoutes = require('./routes/user');
+const newsRoutes = require('./routes/news');
+const jobsRoutes = require('./routes/jobs');
 const projectsRoutes = require('./routes/projects');
 
 // ─── App Init ─────────────────────────────────────────────────────────────────
@@ -106,6 +108,8 @@ app.use('/api/roadmap', roadmapRoutes);
 app.use('/api/project', projectRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/news', newsRoutes);
+app.use('/api/jobs', jobsRoutes);
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {

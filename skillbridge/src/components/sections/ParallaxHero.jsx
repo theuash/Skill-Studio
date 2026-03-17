@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Sparkles, Zap, Star } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Button from '../ui/Button'
 
 function FloatingOrb({ size, x, y, color, delay = 0, duration = 8 }) {
@@ -64,19 +64,12 @@ const particles = Array.from({ length: 20 }, (_, i) => ({
   delay: Math.random() * 4,
 }))
 
-const badges = [
-  { icon: Sparkles, label: 'AI-Powered Roadmaps', color: '#6C63FF', x: '8%', y: '25%', delay: 0 },
-  { icon: Zap, label: '500+ Companies', color: '#00D4FF', x: '82%', y: '20%', delay: 0.5 },
-  { icon: Star, label: '50+ Tech Sectors', color: '#FF6B6B', x: '85%', y: '70%', delay: 1 },
-]
-
 export default function ParallaxHero() {
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] })
 
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -120])
   const y2 = useTransform(scrollYProgress, [0, 1], [0, -200])
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -80])
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
 
@@ -101,28 +94,6 @@ export default function ParallaxHero() {
         {particles.map(p => <Particle key={p.id} {...p} />)}
       </motion.div>
 
-      {/* Floating badges */}
-      <motion.div className="absolute inset-0 pointer-events-none hidden lg:block" style={{ y: y3 }}>
-        {badges.map(({ icon: Icon, label, color, x, y, delay }) => (
-          <motion.div
-            key={label}
-            className="absolute glass rounded-2xl px-4 py-3 flex items-center gap-2.5"
-            style={{ left: x, top: y }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: delay + 1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, delay }}
-            >
-              <Icon size={16} color={color} />
-            </motion.div>
-            <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>{label}</span>
-          </motion.div>
-        ))}
-      </motion.div>
-
       {/* Main content */}
       <motion.div
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 text-center"
@@ -139,12 +110,9 @@ export default function ParallaxHero() {
             border: '1px solid rgba(108,99,255,0.3)',
           }}
         >
-          <Sparkles size={14} color="var(--accent)" />
           <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
-            AI-Powered Career Guidance Platform
+            Career Navigation Made Simple
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-full text-white font-semibold"
-            style={{ background: 'var(--accent)' }}>NEW</span>
         </motion.div>
 
         {/* Headline */}
@@ -170,7 +138,7 @@ export default function ParallaxHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
-          className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10"
+          className="text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10"
           style={{ color: 'var(--text-muted)' }}
         >
           Get personalized, company-specific skill roadmaps. Build real projects. Get AI feedback.
@@ -198,60 +166,16 @@ export default function ParallaxHero() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base cursor-pointer"
+            className="px-8 py-4 rounded-2xl font-semibold text-base cursor-pointer transition-all duration-300"
             style={{
-              background: 'transparent',
-              border: '1px solid var(--border)',
-              color: 'var(--text)',
+              color: 'var(--accent)',
+              background: 'rgba(108,99,255,0.12)',
+              border: '1px solid rgba(108,99,255,0.3)',
             }}
-            onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            See How It Works
+            Learn More
           </motion.button>
         </motion.div>
-
-        {/* Social proof */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="flex flex-wrap items-center justify-center gap-6 mt-14"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          <div className="flex -space-x-2">
-            {['#6C63FF', '#00D4FF', '#FF6B6B', '#4ECDC4', '#FFEAA7'].map((c, i) => (
-              <div key={i} className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white"
-                style={{ background: c, borderColor: 'var(--bg)' }}>
-                {String.fromCharCode(65 + i)}
-              </div>
-            ))}
-          </div>
-          <span className="text-sm">Trusted by <strong style={{ color: 'var(--text)' }}>10,000+</strong> developers worldwide</span>
-          <div className="flex gap-1">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} size={14} fill="var(--secondary)" color="var(--secondary)" />
-            ))}
-          </div>
-          <span className="text-sm font-medium">4.9/5 rating</span>
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        style={{ opacity: 0.5 }}
-      >
-        <div className="w-6 h-10 rounded-full flex items-start justify-center pt-2"
-          style={{ border: '2px solid var(--border)' }}>
-          <motion.div
-            className="w-1 h-2.5 rounded-full"
-            style={{ background: 'var(--accent)' }}
-            animate={{ opacity: [1, 0, 1], scaleY: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </div>
       </motion.div>
     </section>
   )

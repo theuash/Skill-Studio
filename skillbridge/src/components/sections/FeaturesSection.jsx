@@ -93,7 +93,7 @@ export default function FeaturesSection() {
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
-    <section id="features" className="py-24 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg)' }}>
+    <section id="features" className="py-32 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -101,24 +101,26 @@ export default function FeaturesSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
             style={{ background: 'rgba(108,99,255,0.1)', border: '1px solid rgba(108,99,255,0.25)' }}>
             <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
-              Everything You Need
+              What We Offer
             </span>
           </div>
-          <h2 className="font-heading font-extrabold text-4xl sm:text-5xl mb-4" style={{ color: 'var(--text)' }}>
-            Your Career. <span className="gradient-text">Supercharged.</span>
+          <h2 className="font-heading font-extrabold text-4xl sm:text-5xl mb-6" style={{ color: 'var(--text)' }}>
+            Everything You Need
+            <br/>
+            <span className="gradient-text">to Succeed</span>
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' }}>
-            From skill gaps to job offers — SkillBridge gives you every tool to navigate your career journey with confidence.
+          <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+            Comprehensive tools designed to help you identify skill gaps, learn systematically, and build a portfolio that impresses top tech companies.
           </p>
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, i) => (
             <FeatureCard key={feature.title} feature={feature} index={i} />
           ))}

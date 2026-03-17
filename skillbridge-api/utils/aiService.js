@@ -250,4 +250,98 @@ Return ONLY valid JSON.`;
   return parseGroqJSON(response);
 };
 
-module.exports = { generateRoadmap, generateProject, analyzeProjectWithGroq };
+/**
+ * Generate daily industry news briefing
+ */
+const generateNews = async () => {
+  const prompt = `You are an expert AI news curator for tech professionals. Generate today's industry news briefing as a JSON object.
+
+Focus on: Tech, Finance, Healthcare, Education, Manufacturing sectors.
+Today's date: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+
+Return a JSON object with EXACTLY these fields:
+{
+  "headline": "One compelling headline for today's top story",
+  "articles": [
+    {
+      "id": "article_1",
+      "title": "Specific, engaging article title",
+      "summary": "3-4 sentence summary of the news",
+      "sector": "Tech|Finance|Healthcare|Education|Manufacturing",
+      "category": "AI|Cloud|FinTech|Biotech|EdTech|Manufacturing|Policy|Security",
+      "impact": "High|Medium|Low",
+      "readTime": "3 min read",
+      "tags": ["AI", "Machine Learning", "Automation"]
+    }
+  ],
+  "trendingSkills": [
+    {
+      "skill": "Python",
+      "trend": "Rising|Declining|Stable",
+      "demandScore": 85
+    }
+  ],
+  "sectorSummary": {
+    "Tech": "Brief 1-2 sentence summary of tech sector news",
+    "Finance": "Brief 1-2 sentence summary of finance sector news",
+    "Healthcare": "Brief 1-2 sentence summary of healthcare sector news",
+    "Education": "Brief 1-2 sentence summary of education sector news",
+    "Manufacturing": "Brief 1-2 sentence summary of manufacturing sector news"
+  }
+}
+
+Requirements:
+- Generate 12-15 articles across all sectors
+- Mix of High/Medium/Low impact stories
+- Realistic, current industry topics (not fictional)
+- 8-12 trending skills with realistic demand scores (0-100)
+- Headlines and summaries should be engaging and professional
+- Tags should be relevant keywords for each article
+- Return ONLY valid JSON — no markdown, no explanation`
+
+  const response = await groqChat(
+    [
+      {
+        role: 'system',
+        content: 'You are a professional news curator. Always respond with valid JSON only. No markdown. No explanations.',
+      },
+      { role: 'user', content: prompt },
+    ],
+    { temperature: 0.7, max_tokens: 4000 }
+  );
+
+  const newsData = parseGroqJSON(response);
+
+  if (!newsData || typeof newsData !== 'object' || !newsData.articles) {
+    throw new Error('News generation returned invalid structure');
+  }
+
+  // Sanitize and normalize the data
+  return {
+    headline: newsData.headline || 'Industry News Update',
+    articles: Array.isArray(newsData.articles)
+      ? newsData.articles.map((article, idx) => ({
+          id: article.id || `article_${idx + 1}`,
+          title: article.title || `Article ${idx + 1}`,
+          summary: article.summary || '',
+          sector: ['Tech', 'Finance', 'Healthcare', 'Education', 'Manufacturing'].includes(article.sector)
+            ? article.sector
+            : 'Tech',
+          category: article.category || 'Technology',
+          impact: ['High', 'Medium', 'Low'].includes(article.impact) ? article.impact : 'Medium',
+          readTime: article.readTime || '3 min read',
+          tags: Array.isArray(article.tags) ? article.tags : []
+        }))
+      : [],
+    trendingSkills: Array.isArray(newsData.trendingSkills)
+      ? newsData.trendingSkills.map(skill => ({
+          skill: skill.skill || 'Unknown Skill',
+          trend: ['Rising', 'Declining', 'Stable'].includes(skill.trend) ? skill.trend : 'Stable',
+          demandScore: Math.min(100, Math.max(0, Number(skill.demandScore) || 50))
+        }))
+      : [],
+    sectorSummary: typeof newsData.sectorSummary === 'object' ? newsData.sectorSummary : {}
+  };
+};
+
+module.exports = { generateRoadmap, generateProject, analyzeProjectWithGroq, generateNews };
