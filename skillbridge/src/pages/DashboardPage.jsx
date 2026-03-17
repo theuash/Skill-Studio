@@ -6,6 +6,7 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/axios'
 import { SECTORS } from '../utils/data'
+import { SectorIcon } from '../utils/sectorIcons'
 import toast from 'react-hot-toast'
 
 function StatCard({ icon: Icon, label, value, color, delay }) {
@@ -309,7 +310,9 @@ export default function DashboardPage() {
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(108,99,255,0.1)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                  <span>{sector.icon}</span>
+                  <div className="flex items-center justify-center w-5 h-5" style={{ color: sector.color }}>
+                    <SectorIcon sectorId={sector.id} size={18} color={sector.color} />
+                  </div>
                   <span className="text-xs">{sector.name}</span>
                 </button>
               ))}

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, Map, FolderGit2, User, LogOut,
   ChevronLeft, ChevronRight, Zap, Newspaper, Briefcase,
-  ChevronDown, Compass
+  ChevronDown, Compass, Code, DollarSign, Stethoscope, ClipboardList, Factory
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import Logo from '../ui/Logo'
@@ -13,11 +13,11 @@ import toast from 'react-hot-toast'
 import api from '../../api/axios'
 
 const SECTORS = [
-  { id: 'web-development', name: 'Tech', icon: '💻' },
-  { id: 'finance', name: 'Finance', icon: '💰' },
-  { id: 'healthcare', name: 'Healthcare', icon: '🏥' },
-  { id: 'education', name: 'Education', icon: '🎓' },
-  { id: 'manufacturing', name: 'Manufacturing', icon: '🏭' },
+  { id: 'web-development', name: 'Tech', icon: Code },
+  { id: 'finance', name: 'Finance', icon: DollarSign },
+  { id: 'healthcare', name: 'Healthcare', icon: Stethoscope },
+  { id: 'education', name: 'Education', icon: ClipboardList },
+  { id: 'manufacturing', name: 'Manufacturing', icon: Factory },
 ]
 
 const NAV_ITEMS = [
@@ -149,7 +149,7 @@ export default function DashboardLayout({ children }) {
                       onMouseEnter={e => e.currentTarget.style.background = 'rgba(108,99,255,0.1)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
-                      <span>{sector.icon}</span>
+                      <sector.icon size={14} />
                       <span>{sector.name}</span>
                     </button>
                   ))}

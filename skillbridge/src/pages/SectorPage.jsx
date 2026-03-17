@@ -6,6 +6,7 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import CompanyCard from '../components/ui/CompanyCard'
 import { SkeletonCard } from '../components/ui/Skeleton'
 import { SECTORS, COMPANIES } from '../utils/data'
+import { SectorIcon } from '../utils/sectorIcons'
 import api from '../api/axios'
 
 export default function SectorPage() {
@@ -82,9 +83,9 @@ export default function SectorPage() {
 
           <div className="flex items-center gap-4 mb-2">
             {sector && (
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center"
                 style={{ background: `${sector.color}18`, border: `1px solid ${sector.color}30` }}>
-                {sector.icon}
+                <SectorIcon sectorId={sector.id} size={28} color={sector.color} />
               </div>
             )}
             <div>

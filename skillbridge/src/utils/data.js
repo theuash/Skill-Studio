@@ -1,14 +1,14 @@
 export const SECTORS = [
-  { id: 'web-development', name: 'Web Development', icon: '🌐', color: '#6C63FF' },
-  { id: 'data-science', name: 'Data Science', icon: '📊', color: '#00D4FF' },
-  { id: 'ai-ml', name: 'AI/ML', icon: '🤖', color: '#FF6B6B' },
-  { id: 'mobile-development', name: 'Mobile Development', icon: '📱', color: '#4ECDC4' },
-  { id: 'cloud-devops', name: 'Cloud & DevOps', icon: '☁️', color: '#45B7D1' },
-  { id: 'cybersecurity', name: 'Cybersecurity', icon: '🔐', color: '#96CEB4' },
-  { id: 'ui-ux-design', name: 'UI/UX Design', icon: '🎨', color: '#FFEAA7' },
-  { id: 'blockchain', name: 'Blockchain', icon: '⛓️', color: '#DFD3FF' },
-  { id: 'game-development', name: 'Game Development', icon: '🎮', color: '#74B9FF' },
-  { id: 'embedded-systems', name: 'Embedded Systems', icon: '🔧', color: '#A29BFE' },
+  { id: 'web-development', name: 'Web Development', color: '#6C63FF' },
+  { id: 'data-science', name: 'Data Science', color: '#00D4FF' },
+  { id: 'ai-ml', name: 'AI/ML', color: '#FF6B6B' },
+  { id: 'mobile-development', name: 'Mobile Development', color: '#4ECDC4' },
+  { id: 'cloud-devops', name: 'Cloud & DevOps', color: '#45B7D1' },
+  { id: 'cybersecurity', name: 'Cybersecurity', color: '#96CEB4' },
+  { id: 'ui-ux-design', name: 'UI/UX Design', color: '#FFEAA7' },
+  { id: 'blockchain', name: 'Blockchain', color: '#DFD3FF' },
+  { id: 'game-development', name: 'Game Development', color: '#74B9FF' },
+  { id: 'embedded-systems', name: 'Embedded Systems', color: '#A29BFE' },
 ]
 
 export const COMPANIES = {
